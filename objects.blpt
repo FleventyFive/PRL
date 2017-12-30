@@ -1,0 +1,123 @@
+<object Name="Player">
+	<component ComponentName="RenderComponent" name="Flev" description="This is you" symbol="@" color="COLOR_WHITE"/>
+	<component ComponentName="StatsComponent" speed="5" strength="5" vitality="5" defense="5"/>
+	<component ComponentName="TypeComponent" type="OBJ_ENTITY"/>
+	<component ComponentName="EntityTypeComponent" type="ENTITY_PLAYER"/>
+	<component ComponentName="RarityComponent" rarity="SPAWN_ONLY"/>
+	<component ComponentName="InventoryComponent"/>
+	<component ComponentName="WeaponComponent"/>
+	<component ComponentName="ChestArmorComponent"/>
+	<component ComponentName="LegArmorComponent"/>
+	<component ComponentName="HeadArmorComponent"/>
+	<component ComponentName="FootArmorComponent"/>
+	<component ComponentName="HealthComponent" health="10" maxHealth="10"/>
+	<component ComponentName="PositionComponent" x="0" y="0"/>
+	<component ComponentName="EnergyComponent" energy="100" maxEnergy="150"/>
+</object>
+
+<object Name="Kobold">
+	<component ComponentName="RenderComponent" name="Kobold" description="A small angry creature" symbol="k" color="COLOR_YELLOW"/>
+	<component ComponentName="KoboldAIComponent"/>
+	<component ComponentName="HealthComponent" health="10" maxHealth="10"/>
+	<component ComponentName="TypeComponent" type="OBJ_ENTITY"/>
+	<component ComponentName="EntityTypeComponent" type="ENTITY_ENEMY"/>
+	<component ComponentName="RarityComponent" rarity="COMMON"/>
+	<component ComponentName="PositionComponent" x="0" y="0"/>
+	<component ComponentName="StatsComponent" speed="3" strength="3" vitality="5" defense="1"/>
+	<component ComponentName="EnergyComponent" energy="100" maxEnergy="150"/>
+</object>
+
+<object Name="Baton">
+	<component ComponentName="RenderComponent" name="Baton" description="Standard police baton" symbol="|" color="COLOR_WHITE"/>
+	<component ComponentName="DamageComponent" rolls="2" sides="4" type="DAMAGE_BLUNT"/>
+	<component ComponentName="TypeComponent" type="OBJ_WEAPON"/>
+	<component ComponentName="RarityComponent" rarity="COMMON"/>
+	<component ComponentName="PositionComponent" x="0" y="0"/>
+	<component ComponentName="PortableComponent"/>
+	<component ComponentName="EquippedComponent"/>
+</object>
+
+<object Name="DevSword">
+	<component ComponentName="RenderComponent" name="DevSword" description="A weapon so powerful, it can only be wielded by the god of this realm" symbol="!" color="COLOR_WHITE"/>
+	<component ComponentName="DamageComponent" rolls="1000" sides="100000" type="DAMAGE_SLASH"/>
+	<component ComponentName="TypeComponent" type="OBJ_WEAPON"/>
+	<component ComponentName="RarityComponent" rarity="SPAWN_ONLY"/>
+	<component ComponentName="PositionComponent" x="0" y="0"/>
+	<component ComponentName="PortableComponent"/>
+	<component ComponentName="EquippedComponent"/>
+</object>
+
+<object Name="Flak Jacket">
+	<component ComponentName="RenderComponent" name="Flak Jacket" description="A thick vest with steel plates inside" symbol="[" color="COLOR_WHITE"/>
+	<component ComponentName="StatsComponent" speed="0" strength="0" vitality="0" defense="5"/>
+	<component ComponentName="TypeComponent" type="OBJ_ARMOR"/>
+	<component ComponentName="ArmorTypeComponent" type="ARMOR_CHEST"/>
+	<component ComponentName="RarityComponent" rarity="RARE"/>
+	<component ComponentName="PositionComponent" x="0" y="0"/>
+	<component ComponentName="PortableComponent"/>
+	<component ComponentName="EquippedComponent"/>
+</object>
+
+<object Name="Riot Helmet">
+	<component ComponentName="RenderComponent" name="Riot Helmet" description="A tough helmet with a plastic face gaurd" symbol="^" color="COLOR_WHITE"/>
+	<component ComponentName="StatsComponent" speed="0" strength="0" vitality="0" defense="5"/>
+	<component ComponentName="TypeComponent" type="OBJ_ARMOR"/>
+	<component ComponentName="ArmorTypeComponent" type="ARMOR_HEAD"/>
+	<component ComponentName="RarityComponent" rarity="RARE"/>
+	<component ComponentName="PositionComponent" x="0" y="0"/>
+	<component ComponentName="PortableComponent"/>
+	<component ComponentName="EquippedComponent"/>
+</object>
+
+<object Name="Riot Pants">
+	<component ComponentName="RenderComponent" name="Riot Pants" description="A thick, slash resistant pair of pants" symbol="=" color="COLOR_WHITE"/>
+	<component ComponentName="StatsComponent" speed="0" strength="0" vitality="0" defense="5"/>
+	<component ComponentName="TypeComponent" type="OBJ_ARMOR"/>
+	<component ComponentName="ArmorTypeComponent" type="ARMOR_LEG"/>
+	<component ComponentName="RarityComponent" rarity="RARE"/>
+	<component ComponentName="PositionComponent" x="0" y="0"/>
+	<component ComponentName="PortableComponent"/>
+	<component ComponentName="EquippedComponent"/>
+</object>
+
+<object Name="Riot Boots">
+	<component ComponentName="RenderComponent" name="Riot Boots" description="Thick steel plated boots" symbol="'" color="COLOR_WHITE"/>
+	<component ComponentName="StatsComponent" speed="0" strength="0" vitality="0" defense="5"/>
+	<component ComponentName="TypeComponent" type="OBJ_ARMOR"/>
+	<component ComponentName="ArmorTypeComponent" type="ARMOR_FOOT"/>
+	<component ComponentName="RarityComponent" rarity="RARE"/>
+	<component ComponentName="PositionComponent" x="0" y="0"/>
+	<component ComponentName="PortableComponent"/>
+	<component ComponentName="EquippedComponent"/>
+</object>
+
+<object Name="Ground">
+	<component ComponentName="RenderComponent" name="Ground" description="A sturdy steel floor" symbol="." color="COLOR_BLACK"/>
+	<component ComponentName="TypeComponent" type="OBJ_TERRAIN"/>
+	<component ComponentName="TraversableComponent" traversable="true"/>
+</object>
+
+<object Name="Wall">
+	<component ComponentName="RenderComponent" name="Wall" description="A sturdy steel wall" symbol="#" color="COLOR_BLACK"/>
+	<component ComponentName="TypeComponent" type="OBJ_TERRAIN"/>
+	<component ComponentName="TraversableComponent" traversable="false"/>
+</object>
+
+<object Name="Door">
+	<component ComponentName="RenderComponent" name="Closed Door" description="A sturdy steel door with an input panel beside it" symbol="+" color="COLOR_BLACK"/>
+	<component ComponentName="TypeComponent" type="OBJ_TERRAIN"/>
+	<component ComponentName="TraversableComponent" traversable="false"/>
+	<component ComponentName="DoorComponent" open="false"/>
+</object>
+
+<object Name="Stairs Down">
+	<component ComponentName="RenderComponent" name="Stairs down" description="Stairs leading downwards" symbol=">" color="COLOR_BLACK"/>
+	<component ComponentName="TypeComponent" type="OBJ_TERRAIN"/>
+	<component ComponentName="TraversableComponent" traversable="true"/>
+</object>
+
+<object Name="Stairs Up">
+	<component ComponentName="RenderComponent" name="Stairs up" description="Stairs leading upwards" symbol="<" color="COLOR_BLACK"/>
+	<component ComponentName="TypeComponent" type="OBJ_TERRAIN"/>
+	<component ComponentName="TraversableComponent" traversable="true"/>
+</object>

@@ -1,0 +1,104 @@
+# Player
+
+<object Name="Player">
+	<component ComponentName="RenderComponent" name="Flev" description="This is you" symbol="@" color="COLOR_WHITE">
+	<component ComponentName="StatsComponent" speed="5" strength="5" vitality="5" defense="5">
+	<component ComponentName="TypeComponent" type="OBJ_ENTITY" subtype="ENTITY_PLAYER">
+	<component ComponentName="RarityComponent" rarity="SPAWN_ONLY">
+	<component ComponentName="InventoryComponent">
+	<component ComponentName="WeaponComponent">
+	<component ComponentName="ChestArmorComponent">
+	<component ComponentName="LegArmorComponent">
+	<component ComponentName="HeadArmorComponent">
+	<component ComponentName="FootArmorComponent">
+	<component ComponentName="HealthComponent" health="100" maxHealth="100">
+	<component ComponentName="PositionComponent" x="0" y="0">
+	<component ComponentName="EnergyComponent" energy="100" maxEnergy="150">
+</object>
+
+# Enemies
+
+<object Name="Kobold">
+	<component ComponentName="RenderComponent" name="Kobold" description="A small angry creature" symbol="k" color="COLOR_YELLOW">
+	<component ComponentName="HealthComponent" health="10" maxHealth="10">
+	<component ComponentName="TypeComponent" type="OBJ_ENTITY" subtype="ENTITY_ENEMY">
+	<component ComponentName="RarityComponent" rarity="COMMON">
+	<component ComponentName="PositionComponent" x="0" y="0">
+	<component ComponentName="StatsComponent" speed="5" strength="5" vitality="5" defense="5">
+	<component ComponentName="EnergyComponent" energy="100" maxEnergy="150">
+#	<component ComponentName="KoboldAIComponent">
+</object>
+
+# Weapons
+
+<object Name="Baton">
+	<component ComponentName="RenderComponent" name="Baton" description="A standard police baton, sporting a soft mouth grip" symbol="|" color="COLOR_WHITE">
+	<component ComponentName="DamageComponent" rolls="2" sides="4">
+	<component ComponentName="TypeComponent" type="OBJ_WEAPON" subtype="WEAPON_SLASH">
+	<component ComponentName="RarityComponent" rarity="COMMON">
+	<component ComponentName="PortableComponent">
+	<component ComponentName="EquippedComponent">
+</object>
+
+# Armor
+
+<object Name="Flak Jacket">
+	<component ComponentName="RenderComponent" name="Flak Jacket" description="A thick vest with steel plates inside" symbol="[" color="COLOR_WHITE">
+	<component ComponentName="StatsComponent" speed="0" strength="0" vitality="0" defense="5">
+	<component ComponentName="TypeComponent" type="OBJ_ARMOR" subtype="ARMOR_CHEST">
+	<component ComponentName="RarityComponent" rarity="RARE">
+	<component ComponentName="PortableComponent">
+	<component ComponentName="EquippedComponent">
+</object>
+
+<object Name="Riot Helmet">
+	<component ComponentName="RenderComponent" name="Riot Helmet" description="A tough helmet with a plastic face gaurd" symbol="^" color="COLOR_WHITE">
+	<component ComponentName="StatsComponent" speed="0" strength="0" vitality="0" defense="5">
+	<component ComponentName="TypeComponent" type="OBJ_ARMOR" subtype="ARMOR_HEAD">
+	<component ComponentName="RarityComponent" rarity="RARE">
+	<component ComponentName="PortableComponent">
+	<component ComponentName="EquippedComponent">
+</object>
+
+<object Name="Riot Pants">
+	<component ComponentName="RenderComponent" name="Riot Pants" description="A thick, slash resistant pair of pants" symbol="=" color="COLOR_WHITE">
+	<component ComponentName="StatsComponent" speed="0" strength="0" vitality="0" defense="5">
+	<component ComponentName="TypeComponent" type="OBJ_ARMOR" subtype="ARMOR_LEG">
+	<component ComponentName="RarityComponent" rarity="RARE">
+	<component ComponentName="PortableComponent">
+	<component ComponentName="EquippedComponent">
+</object>
+
+<object Name="Riot Boots">
+	<component ComponentName="RenderComponent" name="Riot Boots" description="Thick steel plated boots" symbol="'" color="COLOR_WHITE">
+	<component ComponentName="StatsComponent" speed="0" strength="0" vitality="0" defense="5">
+	<component ComponentName="TypeComponent" type="OBJ_ARMOR" subtype="ARMOR_FOOT">
+	<component ComponentName="RarityComponent" rarity="RARE">
+	<component ComponentName="PortableComponent">
+	<component ComponentName="EquippedComponent">
+</object>
+
+<object Name="DevSword">
+	<component ComponentName="RenderComponent" name="DevSword" description="A weapon so powerful, it can only be wielded by the god of this realm" symbol="!" color="COLOR_WHITE">
+	<component ComponentName="DamageComponent" rolls="1000" sides="100000">
+	<component ComponentName="TypeComponent" type="OBJ_WEAPON" subtype="WEAPON_SLASH">
+	<component ComponentName="RarityComponent" rarity="SPAWN_ONLY">
+	<component ComponentName="PortableComponent">
+	<component ComponentName="EquippedComponent">
+</object>
+
+# Tiles
+
+<object Name="Ground">
+	<component ComponentName="RenderComponent" name="Ground" description="A sturdy steel floor" symbol="." color="COLOR_BLACK">
+	<component ComponentName="TypeComponent" type="OBJ_TERRAIN" subtype="TERRAIN_GROUND">
+	<component ComponentName="RarityComponent" rarity="SPAWN_ONLY">
+	<component ComponentName="TraversableComponent" traversable="true">
+</object>
+
+<object Name="Wall">
+	<component ComponentName="RenderComponent" name="Wall" description="A sturdy steel wall" symbol="#" color="COLOR_BLACK">
+	<component ComponentName="TypeComponent" type="OBJ_TERRAIN" subtype="TERRAIN_WALL">
+	<component ComponentName="RarityComponent" rarity="SPAWN_ONLY">
+	<component ComponentName="TraversableComponent" traversable="false">
+</object>
