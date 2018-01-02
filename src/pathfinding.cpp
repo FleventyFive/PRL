@@ -1,5 +1,23 @@
 #include "pathfinding.hpp"
 
+std::vector<std::tuple<int, int>> pathfinding::reconstructPath(std::tuple<int, int> start, std::tuple<int, int> goal, 
+	std::unordered_map<std::tuple<int, int>, std::tuple<int, int>>& cameFrom)
+{
+	std::vector<std::tuple<int, int>> path;
+	std::tuple<int, int> current = goal;
+	path.push_back(current);
+
+	while(current != start) {
+		current = cameFrom[current];
+		path.push_back(current);
+	}
+
+	path.push_back(start);
+	std::reverse(path.begin(), path.end());
+
+	return path;
+}
+
 std::unordered_map<std::tuple<int, int>, std::tuple<int, int>> pathfinding::dijkstra::createPath(std::tuple<int, int> start, 
 	std::tuple<int, int> goal, PathfindingGrid grid)
 {
@@ -30,24 +48,6 @@ std::unordered_map<std::tuple<int, int>, std::tuple<int, int>> pathfinding::dijk
 	}
 
 	return cameFrom;
-}
-
-std::vector<std::tuple<int, int>> pathfinding::reconstructPath(std::tuple<int, int> start, std::tuple<int, int> goal, 
-	std::unordered_map<std::tuple<int, int>, std::tuple<int, int>>& cameFrom)
-{
-	std::vector<std::tuple<int, int>> path;
-	std::tuple<int, int> current = goal;
-	path.push_back(current);
-
-	while(current != start) {
-		current = cameFrom[current];
-		path.push_back(current);
-	}
-
-	path.push_back(start);
-	std::reverse(path.begin(), path.end());
-
-	return path;
 }
 
 std::unordered_map<std::tuple<int, int>, std::tuple<int, int>> pathfinding::aStar::createPath(std::tuple<int, int> start, 
