@@ -1,8 +1,8 @@
 #include <iostream>
 
-#include <ncurses.h>
-
 #include "game.hpp"
+
+#include "BearLibTerminal/BearLibTerminal.h"
 
 #define VERSION_NUMBER "0.2.7"
 
@@ -11,35 +11,15 @@ int main() {
 	std::cout << "Version - " << VERSION_NUMBER << '\n';
 	std::cout << "Developed by Mark Calhoun: https://github.com/FleventyFive\n";
 
-	// Init Ncurses
-	initscr();
-	cbreak();
-	curs_set(0);
-	refresh();
-	noecho();
-	assert(start_color() == OK);
-	use_default_colors();
+	// Init BearLibTerminal
+	terminal_open();
 
-	for(int i = 0; i < COLORS; ++i) {
-		init_pair(i, i, -1);
-	}
+	// terminal_set("ini.game.tile-size = 32; window: title='Roguelike', size=91x20; log: file=bt.log, level=trace; font: UbuntuMono-R.ttf, size=12; italic font: UbuntuMono-RI.ttf, size=12;");
 
-	if(can_change_color() && COLORS >= 256) {
-		// init_color(COLOR_BLACK, 0, 0, 0);
-		init_color(COLOR_RED, 1000, 0, 0);
-		init_color(COLOR_GREEN, 0, 0, 1000);
-		init_color(COLOR_YELLOW, 1000, 1000, 0);
-		// init_color(COLOR_BLUE, 0, 0, 1000);
-		init_color(COLOR_MAGENTA, 1000, 0, 1000);
-		init_color(COLOR_CYAN, 0, 1000, 1000);
-		init_color(COLOR_WHITE, 1000, 1000, 1000);
-	}
-	
 	Game game;
 
-	use_default_colors();
+	// End BearLibTerminal
+	terminal_close();
 
-	// End Ncurses
-	endwin();
 	return 0;
 }

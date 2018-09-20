@@ -1,8 +1,3 @@
-# file(GLOB_RECURSE sources
-# 	*.cpp
-# 	components/*.cpp
-# )
-
 add_executable(${PROJECT_NAME}
 	main.cpp
 	dialogueWindow.cpp
@@ -34,11 +29,13 @@ add_executable(${PROJECT_NAME}
 	components/door.cpp
 )
 
-# add_executable(${PROJECT_NAME} ${sources})
+# include source directories
+include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(${CMAKE_SOURCE_DIR}/include/components)
 
 target_link_libraries(
 	${PROJECT_NAME}
-	${CURSES_LIBRARIES}
+	${BLT_LIBRARIES}
 )
 
 install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_SOURCE_DIR})

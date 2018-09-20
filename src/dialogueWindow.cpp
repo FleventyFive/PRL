@@ -2,19 +2,17 @@
 
 void DialogueWindow::printMessages() {
 	clear();
-	moveCursor(0, 0);
 	for(std::size_t i = 0; i < dialogue.size(); ++i) {
 		if(dialogue.size() - i > static_cast<std::size_t>(newLineCount)) {
-			wattron(get(), COLOR_PAIR(COLOR_BLACK));
-			print((dialogue[i] + "\n").c_str());
-			wattroff(get(), COLOR_PAIR(COLOR_BLACK));
+			// wattron(get(), COLOR_PAIR(COLOR_BLACK));
+			print(0, i, (dialogue[i]).c_str());
+			// wattroff(get(), COLOR_PAIR(COLOR_BLACK));
 		} else {
-			wattron(get(), COLOR_PAIR(COLOR_WHITE));
-			print((dialogue[i] + "\n").c_str());
-			wattroff(get(), COLOR_PAIR(COLOR_WHITE));
+			// wattron(get(), COLOR_PAIR(COLOR_WHITE));
+			print(0, i, (dialogue[i]).c_str());
+			// wattroff(get(), COLOR_PAIR(COLOR_WHITE));
 		}
 	}
-	refresh();
 }
 
 
@@ -30,6 +28,7 @@ void DialogueWindow::addMessage(const char* fmt, ...) {
 	std::string msg = buff;
 
 	// Chop the message into strings as wide as the window
+	// temporary algorithm
 	if(msg.size() > static_cast<std::size_t>(getWidth())) {
 		std::vector<std::string> segments;
 

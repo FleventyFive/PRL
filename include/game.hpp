@@ -9,30 +9,29 @@
 #include "dialogueWindow.hpp"
 #include "objectFactory.hpp"
 #include "window.hpp"
-#include "events.hpp"
 #include "level.hpp"
 
-#include "health.hpp"
-#include "render.hpp"
-#include "energy.hpp"
-#include "stats.hpp"
-#include "position.hpp"
-#include "koboldAI.hpp"
-#include "traversable.hpp"
-#include "inventory.hpp"
-#include "portable.hpp"
-#include "damage.hpp"
-#include "weapon.hpp"
-#include "armor.hpp"
-#include "type.hpp"
-#include "equipped.hpp"
+#include "components/events.hpp"
+#include "components/health.hpp"
+#include "components/render.hpp"
+#include "components/energy.hpp"
+#include "components/stats.hpp"
+#include "components/position.hpp"
+#include "components/koboldAI.hpp"
+#include "components/traversable.hpp"
+#include "components/inventory.hpp"
+#include "components/portable.hpp"
+#include "components/damage.hpp"
+#include "components/weapon.hpp"
+#include "components/armor.hpp"
+#include "components/type.hpp"
+#include "components/equipped.hpp"
 
 // auto begin = std::chrono::high_resolution_clock::now();
 // auto end = std::chrono::high_resolution_clock::now();
 // times.push_back(std::chrono::duration_cast<std::chrono::miliseconds>(end-begin).count());
 
 #define NO_ENEMY -1
-#define ESCAPE_KEY 27
 
 enum InspectInventoryChoices {
 	CHOICE_EQUIP = 0
@@ -58,7 +57,7 @@ private:
 
 	bool quit = false;
 	bool playerWaiting = false;
-	char input;
+	int input;
 
 	std::vector<double> times;
 

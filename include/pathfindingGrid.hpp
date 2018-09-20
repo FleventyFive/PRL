@@ -5,9 +5,9 @@
 #include <unordered_set>
 #include <array>
 
-#include "traversable.hpp"
+#include "components/traversable.hpp"
+#include "components/position.hpp"
 
-#include "position.hpp"
 #include "spark.hpp"
 
 namespace std {

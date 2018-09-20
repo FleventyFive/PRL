@@ -4,7 +4,7 @@
 #include <random>
 #include <array>
 
-#include "position.hpp"
+#include "components/position.hpp"
 
 class Room {
 public:

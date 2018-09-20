@@ -10,7 +10,7 @@ void DoorComponent::fireEvent(Spark::Event* e) {
 			Spark::Event setDataEvent;
 			if(open) {
 				setDataEvent.type = EVENT_SET_RENDER_DATA;
-				setDataEvent.data = GetRenderEventData({"Closed Door", "A sturdy steel door with an input panel beside it", '+', COLOR_BLACK});
+				setDataEvent.data = GetRenderEventData({"Closed Door", "A sturdy steel door with an input panel beside it", "+", COLOR_BLACK});
 				getOwner()->fireEvent(&setDataEvent);
 				setDataEvent.type = EVENT_SET_TRAVERSABLE;
 				setDataEvent.data = TraversableEventData({false});
@@ -18,7 +18,7 @@ void DoorComponent::fireEvent(Spark::Event* e) {
 				open = false;
 			} else {
 				setDataEvent.type = EVENT_SET_RENDER_DATA;
-				setDataEvent.data = GetRenderEventData({"Open Door", "An open door", '/', COLOR_BLACK});
+				setDataEvent.data = GetRenderEventData({"Open Door", "An open door", "/", COLOR_BLACK});
 				getOwner()->fireEvent(&setDataEvent);
 				setDataEvent.type = EVENT_SET_TRAVERSABLE;
 				setDataEvent.data = TraversableEventData({true});

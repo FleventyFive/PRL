@@ -66,7 +66,7 @@ enum EventType {
 };
 
 // Event payloads
-struct GetRenderEventData { std::string name, description; char symbol; short color; };
+struct GetRenderEventData { std::string name, description; std::string symbol; short color; };
 
 struct EnergyEventData { int energy, maxEnergy; };
 

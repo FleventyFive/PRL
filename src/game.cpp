@@ -2,14 +2,13 @@
 
 Game::Game(): world(), viewport(VIEWPORT_HEIGHT, VIEWPORT_WIDTH, 0, 0), 
 	dialogue(VIEWPORT_HEIGHT - 3, 45, VIEWPORT_WIDTH + 1, 3), hud(3, 45, VIEWPORT_WIDTH + 1, 0),
-	level(), objectFactory(world, "/Users/markcalhoun/main/c++/Roguelike/objects.blpt"), updateCount(0),
+	level(), objectFactory(world, "/Users/markcalhoun/main/c++/Games/Roguelike/objects.blpt"), updateCount(0),
 	levelHeight(0) {
 
 	level.createLevel(objectFactory, true);
 
-	for(int i = 0; i < 100; ++i) {
+	for(int i = 0; i < 100; ++i)
 		eventPool.add(std::unique_ptr<Spark::Event>{ std::make_unique<Spark::Event>() });
-	}
 
 	auto e = eventPool.getResource();
 
@@ -20,7 +19,9 @@ Game::Game(): world(), viewport(VIEWPORT_HEIGHT, VIEWPORT_WIDTH, 0, 0),
 
  	addToInventory(player, objectFactory.createObject("DevSword"), e);
 	
+	// dialogue.addMessage("[font=italic]Welcome to Roguelike[/font] %s", getRenderData(player, e).name.c_str());
 	dialogue.addMessage("Welcome to Roguelike %s", getRenderData(player, e).name.c_str());
+
 	draw();
 
 	while(!quit) {
@@ -40,22 +41,22 @@ Game::Game(): world(), viewport(VIEWPORT_HEIGHT, VIEWPORT_WIDTH, 0, 0),
 
 	if(!isAlive(player, e)) {
 		viewport.clear();
-		viewport.mvprint(0, 0, "Player dead");
-		viewport.refresh();
-		getch();
+		viewport.print(0, 0, "Player dead");
+		terminal_refresh();
+		terminal_read();
 	}
 }
 
 void Game::draw() {
 	drawViewport();
-	viewport.refresh();
 
 	hud.clear();
 	drawHud();
-	hud.refresh();
 
 	dialogue.printMessages();
 	dialogue.resetCounter();
+
+	terminal_refresh();
 }
 
 void Game::drawViewport() {
@@ -74,11 +75,11 @@ void Game::drawViewport() {
 	PositionEventData positionData = getPlayerPos();
 
 	player->fireEvent(renderDataEvent);
-	wattron(viewport.get(), COLOR_PAIR(renderData.color));
-	viewport.printChar(positionData.x, positionData.y, renderData.symbol);
-	wattroff(viewport.get(), COLOR_PAIR(renderData.color));
+	// wattron(viewport.get(), COLOR_PAIR(renderData.color));
+	viewport.print(positionData.x, positionData.y, renderData.symbol.c_str());
+	// wattroff(viewport.get(), COLOR_PAIR(renderData.color));
 
-	viewport.refresh();
+	terminal_refresh();
 }
 
 void Game::drawHud() {
@@ -94,14 +95,14 @@ void Game::drawHud() {
 	GetStatsEventData statsData = getStatsData(player, statsDataEvent);
 	InventorySizeEventData inventoryData = getInventoryData(player, getInventoryDataEvent);
 
-	wattron(hud.get(), COLOR_PAIR(COLOR_WHITE));
+	// wattron(hud.get(), COLOR_PAIR(COLOR_WHITE));
 
-	hud.mvprint(0, 0, "%s - Update: %d, Inventory size: %d\nEnergy: %d/%d, Health: %0.0f/%0.0f, Defense: %0.0f\nLevel Pos: %d",
+	hud.print(0, 0, "%s - Update: %d, Inventory size: %d\nEnergy: %d/%d, Health: %0.0f/%0.0f, Defense: %0.0f\nLevel Pos: %d",
 		renderData.name.c_str(), updateCount, inventoryData.size, 
 		energyData.energy, energyData.maxEnergy, healthData.health, healthData.maxHealth, statsData.defense,
 		levelHeight);
 
-	wattroff(hud.get(), COLOR_PAIR(COLOR_WHITE));
+	// wattroff(hud.get(), COLOR_PAIR(COLOR_WHITE));
 }
 
 void Game::update() {
@@ -118,46 +119,58 @@ void Game::update() {
 }
 
 void Game::processInput() {
-	input = getch();
-
+	// bool invalidInputReceived = false;
 	auto e = eventPool.getResource();
 
-	switch (input) {
-		case 'Q':
-			quit = true;
-			break;
-		case 'w':
-		case 'a':
-		case 's':
-		case 'd':
-			movePlayer(input);
-			break;
-		case 'g':
-			playerPickUpItem();
-			break;
-		case 'i':
-			playerInspectInventory();
-			break;
-		case '.':
-			playerWaiting = true;
-			break;
-		case 'x':
-			// Inspect terrain, inspects data will be displayed in the
-			// dialogue window
-			break;
-		case 'c':
-			playerCloseDoor();
-			break;
-		case '<':
-			moveLevelUp();
-			break;
-		case '>':
-			moveLevelDown();
-			break;
-		default:
-			dialogue.addMessage("Command %c not recognized", input);
-			break;
-	}
+	do {
+		input = terminal_read();
+
+		switch (input) {
+			case TK_Q:
+				quit = true;
+				break;
+			case TK_W:
+				movePlayer('w');
+				break;
+			case TK_A:
+				movePlayer('a');
+				break;
+			case TK_S:
+				movePlayer('s');
+				break;
+			case TK_D:
+				movePlayer('d');
+				break;
+			case TK_G:
+				playerPickUpItem();
+				break;
+			case TK_I:
+				playerInspectInventory();
+				break;
+			case TK_PERIOD:
+				if(terminal_check(TK_SHIFT))
+					moveLevelUp();
+				else
+					playerWaiting = true;
+				break;
+			case TK_COMMA:
+				if(terminal_check(TK_SHIFT))
+					moveLevelDown();
+				break;
+			case TK_X:
+				// Inspect terrain, inspects data will be displayed in the
+				// dialogue window
+				break;
+			case TK_C:
+				playerCloseDoor();
+				break;
+			case TK_SHIFT:
+				break;
+			default:
+				dialogue.addMessage("Command %c not recognized", input);
+				break;
+		}
+	} while(input == TK_SHIFT);
 }
 
 void Game::movePlayer(const char& direction) {
@@ -241,16 +254,14 @@ void Game::playerInspectInventory() {
 		Window descriptionWindow = Window(VIEWPORT_HEIGHT - 10, 57, VIEWPORT_WIDTH + 1, 10);
 
 		// Print description controls
-		wattron(descriptionWindow.get(), COLOR_PAIR(COLOR_WHITE));
-		descriptionWindow.fill('%');
-		descriptionWindow.refresh();
-		wattroff(descriptionWindow.get(), COLOR_PAIR(COLOR_WHITE));
+		// wattron(descriptionWindow.get(), COLOR_PAIR(COLOR_WHITE));
+		descriptionWindow.fill("%");
+		// wattroff(descriptionWindow.get(), COLOR_PAIR(COLOR_WHITE));
 
 		// Print menu controls
-		wattron(controlsWindow.get(), COLOR_PAIR(COLOR_WHITE));
-		controlsWindow.mvprint(0, 0, "[w/s] Scroll [enter] Select [c] Cancel");
-		controlsWindow.refresh();
-		wattroff(controlsWindow.get(), COLOR_PAIR(COLOR_WHITE));
+		// wattron(controlsWindow.get(), COLOR_PAIR(COLOR_WHITE));
+		controlsWindow.print(0, 0, "[w/s] Scroll [enter] Select [c] Cancel");
+		// wattroff(controlsWindow.get(), COLOR_PAIR(COLOR_WHITE));
 
 		auto isEquipped = eventPool.getResource();
 		isEquipped->type = EVENT_GET_IS_EQUIPPED;
@@ -263,45 +274,44 @@ void Game::playerInspectInventory() {
 		const GetRenderEventData& rde = std::any_cast<const GetRenderEventData&>(renderData->data);
 
 		int menuPos = 0, itemPos = 0;
-		char menuInput = '\0';
+		int menuInput = 0;
 
-		while(menuInput != 'c' && menuInput != ESCAPE_KEY && !done) {
+		terminal_refresh();
+
+		while(menuInput != TK_C && menuInput != TK_ESCAPE && !done) {
 			descriptionWindow.clear();
 
 			descriptionWindow.clear();
-			descriptionWindow.fill('%');
-			descriptionWindow.refresh();
+			descriptionWindow.fill("%");
 
 			itemSelectionWindow.clear();
 
-			wattron(itemSelectionWindow.get(), COLOR_PAIR(COLOR_WHITE));
+			// wattron(itemSelectionWindow.get(), COLOR_PAIR(COLOR_WHITE));
 			// Print the items
 			for(std::size_t i = 0; i < std::min(inventory.size(), (size_t)8); ++i) {
 				inventory[i + (itemPos - menuPos)]->fireEvent(renderData);
 				inventory[i + (itemPos - menuPos)]->fireEvent(isEquipped);
 
 				if(ee.equipped != true)
-					itemSelectionWindow.mvprint(1, i, " - %s", rde.name.c_str());
+					itemSelectionWindow.print(1, i, " - %s", rde.name.c_str());
 				else
-					itemSelectionWindow.mvprint(1, i, " * %s", rde.name.c_str());
+					itemSelectionWindow.print(1, i, " * %s", rde.name.c_str());
 			}
 
 			// Print the cursor
-			itemSelectionWindow.printChar(0, menuPos, '>');
-			wattroff(itemSelectionWindow.get(), COLOR_PAIR(COLOR_WHITE));
+			itemSelectionWindow.print(0, menuPos, ">");
+			// wattroff(itemSelectionWindow.get(), COLOR_PAIR(COLOR_WHITE));
 
 			// Display the changes
-			itemSelectionWindow.refresh();
-			descriptionWindow.refresh();
+			terminal_refresh();
 
 			// Clear the cursor
-			itemSelectionWindow.printChar(0, menuPos, ' ');
+			itemSelectionWindow.print(0, menuPos, " ");
 
-			menuInput = getch();
+			menuInput = terminal_read();
 
 			switch(menuInput) {
-				case 'w':
-				case 'W':
+				case TK_W:
 					if(menuPos > 0) {
 						--menuPos;
 					}
@@ -309,8 +319,7 @@ void Game::playerInspectInventory() {
 						--itemPos;
 					}
 					break;
-				case 's':
-				case 'S':
+				case TK_S:
 					if((std::size_t)menuPos < std::min((inventory.size() - 1), (std::size_t)7)) {
 						++menuPos;
 					}
@@ -318,14 +327,13 @@ void Game::playerInspectInventory() {
 						++itemPos;
 					}
 					break;
-				case '\n':
+				case TK_RETURN:
 					dialogue.printMessages();
 					
 					hud.clear();
-					hud.refresh();
-					
 					viewport.clear();
-					viewport.refresh();
+
+					terminal_refresh();
 					
 					playerPickAction(inventory, itemPos);
 					done = true;
@@ -336,14 +344,15 @@ void Game::playerInspectInventory() {
 		}
 
 	descriptionWindow.clear();
-	descriptionWindow.refresh();
+
+	terminal_refresh();
 	} else {
 		dialogue.addMessage("Your inventory is empty");
 	}
 
 	hud.clear();
 	drawHud();
-	hud.refresh();
+	terminal_refresh();
 }
 
 void Game::playerPickAction(std::vector<Spark::GameObject*>& inventory, int itemPos) {
@@ -356,22 +365,21 @@ void Game::playerPickAction(std::vector<Spark::GameObject*>& inventory, int item
 	// menuWindow holds the options available and takes the right half of the viewport
 	Window menuWindow = Window(VIEWPORT_HEIGHT - 2, VIEWPORT_WIDTH / 2 - 1, VIEWPORT_WIDTH / 2 + 1, 2);
 
-	char menuInput = '\0';
+	int menuInput = 0;
 	int menuPos = 0;
 
-	wattron(controlsWindow.get(), COLOR_PAIR(COLOR_WHITE));
-	controlsWindow.mvprint(0, 0, "[w/s] Scroll [enter] Select [c] Cancel");
-	controlsWindow.refresh();
-	wattroff(controlsWindow.get(), COLOR_PAIR(COLOR_WHITE));
+	// wattron(controlsWindow.get(), COLOR_PAIR(COLOR_WHITE));
+	controlsWindow.print(0, 0, "[w/s] Scroll [enter] Select [c] Cancel");
+	// wattroff(controlsWindow.get(), COLOR_PAIR(COLOR_WHITE));
 
 	std::vector<std::string> menuChoices;
 	menuChoices.push_back("Equip");
 	menuChoices.push_back("Drop");
 
-	wattron(menuWindow.get(), COLOR_PAIR(COLOR_WHITE));
+	// wattron(menuWindow.get(), COLOR_PAIR(COLOR_WHITE));
 	for(std::size_t i = 0; i < menuChoices.size(); ++i)
-		menuWindow.mvprint(2, i, menuChoices[i].c_str());
-	wattroff(menuWindow.get(), COLOR_PAIR(COLOR_WHITE));
+		menuWindow.print(2, i, menuChoices[i].c_str());
+	// wattroff(menuWindow.get(), COLOR_PAIR(COLOR_WHITE));
 
 	// Get name and description
 	GetRenderEventData rde = getRenderData(inventory[itemPos], e);
@@ -380,38 +388,37 @@ void Game::playerPickAction(std::vector<Spark::GameObject*>& inventory, int item
 	divider.insert(0, VIEWPORT_WIDTH / 2, '-');
 
 	// print name an description
-	wattron(descriptionWindow.get(), COLOR_PAIR(COLOR_WHITE));
-	descriptionWindow.mvprint(0, 0, rde.name.c_str());
-	descriptionWindow.mvprint(0, 1, divider.c_str());
-	descriptionWindow.mvprint(0, 2, wrapByWord(VIEWPORT_WIDTH / 2, rde.description).c_str());
-	descriptionWindow.refresh();
-	wattroff(descriptionWindow.get(), COLOR_PAIR(COLOR_WHITE));
+	// wattron(descriptionWindow.get(), COLOR_PAIR(COLOR_WHITE));
+	descriptionWindow.print(0, 0, rde.name.c_str());
+	descriptionWindow.print(0, 1, divider.c_str());
+	descriptionWindow.print(0, 2, wrapByWord(VIEWPORT_WIDTH / 2, rde.description).c_str());
+	// wattroff(descriptionWindow.get(), COLOR_PAIR(COLOR_WHITE));
 
-	while(menuInput != 'c' && menuInput != ESCAPE_KEY && !done) {
-		wattron(menuWindow.get(), COLOR_PAIR(COLOR_WHITE));
+	terminal_refresh();
+
+	while(menuInput != TK_C && menuInput != TK_ESCAPE && !done) {
+		// wattron(menuWindow.get(), COLOR_PAIR(COLOR_WHITE));
 		// Print cursor
-		menuWindow.printChar(0, menuPos, '>');
-		menuWindow.refresh();
-		wattroff(menuWindow.get(), COLOR_PAIR(COLOR_WHITE));
+		menuWindow.print(0, menuPos, ">");
+		terminal_refresh();
+		// wattroff(menuWindow.get(), COLOR_PAIR(COLOR_WHITE));
 		// Erase cursor for next print
-		menuWindow.printChar(0, menuPos, ' ');
+		menuWindow.print(0, menuPos, " ");
 
-		menuInput = getch();
+		menuInput = terminal_read();
 		
 		switch(menuInput) {
-			case 'w':
-			case 'W':
+			case TK_W:
 				if(menuPos > 0) {
 					menuPos--;
 				}
 				break;
-			case 's':
-			case 'S':
+			case TK_S:
 				if((std::size_t)menuPos < menuChoices.size() - 1) {
 					menuPos++;
 				}
 				break;
-			case '\n':
+			case TK_RETURN:
 				if(menuChoices[menuPos] == "Equip")
 					playerEquip(inventory, itemPos);
 				else if(menuChoices[menuPos] == "Drop")
@@ -443,37 +450,32 @@ void Game::playerPickUpItem() {
 	// The descriptionWindow gets the rest of the space
 	Window descriptionWindow = Window(VIEWPORT_HEIGHT - 10,  57, VIEWPORT_WIDTH + 1, 10);
 
-	wattron(itemSelectionWindow.get(), COLOR_PAIR(COLOR_WHITE));
-	itemSelectionWindow.mvprint(0, 0, "Pick up where? w,a,s,d, [c] Cancel");
-	wattroff(itemSelectionWindow.get(), COLOR_PAIR(COLOR_WHITE));
-	itemSelectionWindow.refresh();
-	itemSelectionWindow.mvprint(0, 0, "                                  ");
+	// wattron(itemSelectionWindow.get(), COLOR_PAIR(COLOR_WHITE));
+	itemSelectionWindow.print(0, 0, "Pick up where? w,a,s,d, [c] Cancel");
+	// wattroff(itemSelectionWindow.get(), COLOR_PAIR(COLOR_WHITE));
+	terminal_refresh();
+	itemSelectionWindow.print(0, 0, "                                  ");
 
 	PositionEventData positionData = getPosition(player, e);
 
 	int pickUpPositionX = positionData.x, pickUpPositionY = positionData.y;
 
-	char dir = getch();
+	char dir = terminal_read();
 
 	switch(dir) {
-		case 'w':
-		case 'W':
+		case TK_W:
 			--pickUpPositionY;
 			break;
-		case 'a':
-		case 'A':
+		case TK_A:
 			--pickUpPositionX;
 			break;
-		case 's':
-		case 'S':
+		case TK_S:
 			++pickUpPositionY;
 			break;
-		case 'd':
-		case 'D':
+		case TK_D:
 			++pickUpPositionX;
 			break;
-		case 'c':
-		case 'C':
+		case TK_C:
 			dialogue.addMessage("Canceled");
 			return;
 			break;
@@ -493,16 +495,16 @@ void Game::playerPickUpItem() {
 
 	if(items.size() > 0) {
 		int menuPos = 0, itemPos = 0;
-		char menuInput = '\0';
+		int menuInput = 0;
 
-		wattron(controlsWindow.get(), COLOR_PAIR(COLOR_WHITE));
+		// wattron(controlsWindow.get(), COLOR_PAIR(COLOR_WHITE));
 		// Print menu controls
-		controlsWindow.mvprint(0, 0, "[w/s] Scroll [enter] Select [c] Cancel");
-		controlsWindow.refresh();
-		wattroff(controlsWindow.get(), COLOR_PAIR(COLOR_WHITE));
+		controlsWindow.print(0, 0, "[w/s] Scroll [enter] Select [c] Cancel");
+		terminal_refresh();
+		// wattroff(controlsWindow.get(), COLOR_PAIR(COLOR_WHITE));
 
 		// Allow the player to search through the menu
-		while(menuInput != 'c' && menuInput != ESCAPE_KEY) {
+		while(menuInput != TK_C && menuInput != TK_ESCAPE) {
 			itemSelectionWindow.clear();
 			descriptionWindow.clear();
 
@@ -512,24 +514,22 @@ void Game::playerPickUpItem() {
 			const GetRenderEventData& rde = std::any_cast<const GetRenderEventData&>(e->data);
 
 			// Print the objects
-			wattron(itemSelectionWindow.get(), COLOR_PAIR(COLOR_WHITE));
+			// wattron(itemSelectionWindow.get(), COLOR_PAIR(COLOR_WHITE));
 			for(std::size_t i = 0; i < std::min(items.size(), (std::size_t)8); ++i) {
 				items[i + (itemPos - menuPos)]->fireEvent(e);
-				itemSelectionWindow.mvprint(1, i, " - %s", rde.name.c_str());
+				itemSelectionWindow.print(1, i, " - %s", rde.name.c_str());
 			}
 
 			// Print the cursor
-			itemSelectionWindow.printChar(0, menuPos, '>');
-			wattroff(itemSelectionWindow.get(), COLOR_PAIR(COLOR_WHITE));
+			itemSelectionWindow.print(0, menuPos, ">");
+			// wattroff(itemSelectionWindow.get(), COLOR_PAIR(COLOR_WHITE));
 
-			itemSelectionWindow.refresh();
-			descriptionWindow.refresh();
+			terminal_refresh();
 
-			menuInput = getch();
+			menuInput = terminal_read();
 
 			switch(menuInput) {
-				case 'w':
-				case 'W':
+				case TK_W:
 					if(menuPos > 0) {
 						--menuPos;
 					}
@@ -537,8 +537,7 @@ void Game::playerPickUpItem() {
 						--itemPos;
 					}
 					break;
-				case 's':
-				case 'S':
+				case TK_S:
 					if((std::size_t)menuPos < std::min((items.size() - 1), (std::size_t)7)) {
 						++menuPos;
 					}
@@ -546,7 +545,7 @@ void Game::playerPickUpItem() {
 						++itemPos;
 					}
 					break;
-				case '\n':
+				case TK_RETURN:
 					// Get render data using pre-existing event
 					items[itemPos]->fireEvent(e);
 					dialogue.addMessage("You got the %s", rde.name.c_str());
@@ -692,32 +691,28 @@ void Game::playerDrop(std::vector<Spark::GameObject*>& inventory, int itemPos) {
 
 	drawViewport();
 
-	wattron(hud.get(), COLOR_PAIR(COLOR_WHITE));
+	// wattron(hud.get(), COLOR_PAIR(COLOR_WHITE));
 	hud.clear();
-	hud.mvprint(0, 0, "[w] Up [a] Left [s] Down [d] Right");
-	hud.refresh();
-	wattroff(hud.get(), COLOR_PAIR(COLOR_WHITE));
+	hud.print(0, 0, "[w] Up [a] Left [s] Down [d] Right");
+	terminal_refresh();
+	// wattroff(hud.get(), COLOR_PAIR(COLOR_WHITE));
 
-	char dir = getch();
+	char dir = terminal_read();
 	PositionEventData positionData = getPosition(player, e);
 
 	int xNew = positionData.x, yNew = positionData.y;
 
 	switch(dir) {
-		case 'w':
-		case 'W':
+		case TK_W:
 			--yNew;
 			break;
-		case 'a':
-		case 'A':
+		case TK_A:
 			--xNew;
 			break;
-		case 's':
-		case 'S':
+		case TK_S:
 			++yNew;
 			break;
-		case 'd':
-		case 'D':
+		case TK_D:
 			++xNew;
 			break;
 		default:
@@ -737,34 +732,30 @@ void Game::playerDrop(std::vector<Spark::GameObject*>& inventory, int itemPos) {
 }
 
 void Game::playerCloseDoor() {
-	wattron(hud.get(), COLOR_PAIR(COLOR_WHITE));
+	// wattron(hud.get(), COLOR_PAIR(COLOR_WHITE));
 	hud.clear();
-	hud.mvprint(0, 0, "[w] Up [a] Left [s] Down [d] Right");
-	hud.refresh();
-	wattroff(hud.get(), COLOR_PAIR(COLOR_WHITE));
+	hud.print(0, 0, "[w] Up [a] Left [s] Down [d] Right");
+	terminal_refresh();
+	// wattroff(hud.get(), COLOR_PAIR(COLOR_WHITE));
 
 	auto e = eventPool.getResource();
 
-	char dir = getch();
+	char dir = terminal_read();
 	PositionEventData positionData = getPosition(player, e);
 
 	int xNew = positionData.x, yNew = positionData.y;
 
 	switch(dir) {
-		case 'w':
-		case 'W':
+		case TK_W:
 			--yNew;
 			break;
-		case 'a':
-		case 'A':
+		case TK_A:
 			--xNew;
 			break;
-		case 's':
-		case 'S':
+		case TK_S:
 			++yNew;
 			break;
-		case 'd':
-		case 'D':
+		case TK_D:
 			++xNew;
 			break;
 		default:

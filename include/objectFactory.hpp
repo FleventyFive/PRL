@@ -8,29 +8,27 @@
 #include <string>
 #include <map>
 
-#include <ncurses.h>
-
 #include "spark.hpp"
-#include "events.hpp"
 
-#include "health.hpp"
-#include "render.hpp"
-#include "energy.hpp"
-#include "stats.hpp"
-#include "position.hpp"
-#include "traversable.hpp"
-#include "koboldAI.hpp"
-#include "inventory.hpp"
-#include "portable.hpp"
-#include "damage.hpp"
-#include "weapon.hpp"
-#include "armor.hpp"
-#include "type.hpp"
-#include "equipped.hpp"
-#include "rarity.hpp"
-#include "armorType.hpp"
-#include "entityType.hpp"
-#include "door.hpp"
+#include "components/events.hpp"
+#include "components/health.hpp"
+#include "components/render.hpp"
+#include "components/energy.hpp"
+#include "components/stats.hpp"
+#include "components/position.hpp"
+#include "components/traversable.hpp"
+#include "components/koboldAI.hpp"
+#include "components/inventory.hpp"
+#include "components/portable.hpp"
+#include "components/damage.hpp"
+#include "components/weapon.hpp"
+#include "components/armor.hpp"
+#include "components/type.hpp"
+#include "components/equipped.hpp"
+#include "components/rarity.hpp"
+#include "components/armorType.hpp"
+#include "components/entityType.hpp"
+#include "components/door.hpp"
 
 class ObjectFactory {
 private:
@@ -44,6 +42,8 @@ private:
 	std::vector<ObjectSpawnData> entitySpawnDataVec;
 	std::vector<ObjectSpawnData> weaponSpawnDataVec;
 	std::vector<ObjectSpawnData> armorSpawnDataVec;
+	
+	// std::map<std::map<std::vector<ObjectSpawnData>>>
 
 	std::mt19937 eng{std::random_device{}()};
 

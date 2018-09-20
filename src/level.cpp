@@ -21,26 +21,20 @@ void Level::draw(Window& win) {
 	for(unsigned int i = 0; i < LEVEL_WIDTH; ++i) {
 		for(unsigned int j = 0; j < LEVEL_HEIGHT; ++j) {
 			tiles[i][j]->fireEvent(renderDataEvent);
-			wattron(win.get(), COLOR_PAIR(renderData.color));
-			win.printChar(i, j, renderData.symbol);
-			wattroff(win.get(), COLOR_PAIR(renderData.color));
+			win.print(i, j, renderData.symbol.c_str());
 		}
 	}
 
 	for(const auto& object : objects) {
 		object->fireEvent(renderDataEvent);
 		object->fireEvent(positionDataEvent);
-		wattron(win.get(), COLOR_PAIR(renderData.color));
-		win.printChar(positionData.x, positionData.y, renderData.symbol);
-		wattroff(win.get(), COLOR_PAIR(renderData.color));
+		win.print(positionData.x, positionData.y, renderData.symbol.c_str());
 	}
 
 	for(const auto& enemy : enemies) {
 		enemy->fireEvent(renderDataEvent);
 		enemy->fireEvent(positionDataEvent);
-		wattron(win.get(), COLOR_PAIR(renderData.color));
-		win.printChar(positionData.x, positionData.y, renderData.symbol);
-		wattroff(win.get(), COLOR_PAIR(renderData.color));
+		win.print(positionData.x, positionData.y, renderData.symbol.c_str());
 	}
 }
 
@@ -174,7 +168,7 @@ void Level::createLevel(ObjectFactory& objectFactory, bool firstLevel) {
 	// TEST SPAWNS
 	auto e = eventPool.getResource();
 
-	enemies.push_back(objectFactory.createObject("Kobold"));
+	enemies.push_back(objectFactory.createObject("Security Drone"));
 	setPosition(playerSpawnPosition.x - 3, playerSpawnPosition.y + 1, enemies.back(), e);
 
 	for(int i = 0; i < 2; ++i) {

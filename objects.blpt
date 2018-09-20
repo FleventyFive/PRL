@@ -1,5 +1,5 @@
 <object Name="Player">
-	<component ComponentName="RenderComponent" name="Flev" description="This is you" symbol="@" color="COLOR_WHITE"/>
+	<component ComponentName="RenderComponent" name="user" description="This is you" symbol="@" color="COLOR_WHITE"/>
 	<component ComponentName="StatsComponent" speed="5" strength="5" vitality="5" defense="5"/>
 	<component ComponentName="TypeComponent" type="OBJ_ENTITY"/>
 	<component ComponentName="EntityTypeComponent" type="ENTITY_PLAYER"/>
@@ -15,8 +15,8 @@
 	<component ComponentName="EnergyComponent" energy="100" maxEnergy="150"/>
 </object>
 
-<object Name="Kobold">
-	<component ComponentName="RenderComponent" name="Kobold" description="A small angry creature" symbol="k" color="COLOR_YELLOW"/>
+<object Name="Security Drone">
+	<component ComponentName="RenderComponent" name="Security Drone" description="A small drone" symbol="d" color="COLOR_YELLOW"/>
 	<component ComponentName="KoboldAIComponent"/>
 	<component ComponentName="HealthComponent" health="10" maxHealth="10"/>
 	<component ComponentName="TypeComponent" type="OBJ_ENTITY"/>
@@ -48,7 +48,7 @@
 </object>
 
 <object Name="Flak Jacket">
-	<component ComponentName="RenderComponent" name="Flak Jacket" description="A thick vest with steel plates inside" symbol="[" color="COLOR_WHITE"/>
+	<component ComponentName="RenderComponent" name="Flak Jacket" description="A thick vest with steel plates inside" symbol="[[" color="COLOR_WHITE"/>
 	<component ComponentName="StatsComponent" speed="0" strength="0" vitality="0" defense="5"/>
 	<component ComponentName="TypeComponent" type="OBJ_ARMOR"/>
 	<component ComponentName="ArmorTypeComponent" type="ARMOR_CHEST"/>
@@ -94,30 +94,35 @@
 <object Name="Ground">
 	<component ComponentName="RenderComponent" name="Ground" description="A sturdy steel floor" symbol="." color="COLOR_BLACK"/>
 	<component ComponentName="TypeComponent" type="OBJ_TERRAIN"/>
+	<component ComponentName="RarityComponent" rarity="SPAWN_ONLY">
 	<component ComponentName="TraversableComponent" traversable="true"/>
 </object>
 
 <object Name="Wall">
 	<component ComponentName="RenderComponent" name="Wall" description="A sturdy steel wall" symbol="#" color="COLOR_BLACK"/>
 	<component ComponentName="TypeComponent" type="OBJ_TERRAIN"/>
+	<component ComponentName="RarityComponent" rarity="SPAWN_ONLY">
 	<component ComponentName="TraversableComponent" traversable="false"/>
 </object>
 
 <object Name="Door">
 	<component ComponentName="RenderComponent" name="Closed Door" description="A sturdy steel door with an input panel beside it" symbol="+" color="COLOR_BLACK"/>
 	<component ComponentName="TypeComponent" type="OBJ_TERRAIN"/>
+	<component ComponentName="RarityComponent" rarity="SPAWN_ONLY">
 	<component ComponentName="TraversableComponent" traversable="false"/>
 	<component ComponentName="DoorComponent" open="false"/>
 </object>
 
 <object Name="Stairs Down">
-	<component ComponentName="RenderComponent" name="Stairs down" description="Stairs leading downwards" symbol=">" color="COLOR_BLACK"/>
+	<component ComponentName="RenderComponent" name="Stairs down" description="Stairs leading downwards" symbol="<" color="COLOR_BLACK"/>
 	<component ComponentName="TypeComponent" type="OBJ_TERRAIN"/>
+	<component ComponentName="RarityComponent" rarity="SPAWN_ONLY">
 	<component ComponentName="TraversableComponent" traversable="true"/>
 </object>
 
 <object Name="Stairs Up">
-	<component ComponentName="RenderComponent" name="Stairs up" description="Stairs leading upwards" symbol="<" color="COLOR_BLACK"/>
+	<component ComponentName="RenderComponent" name="Stairs up" description="Stairs leading upwards" symbol=">" color="COLOR_BLACK"/>
 	<component ComponentName="TypeComponent" type="OBJ_TERRAIN"/>
+	<component ComponentName="RarityComponent" rarity="SPAWN_ONLY">
 	<component ComponentName="TraversableComponent" traversable="true"/>
 </object>

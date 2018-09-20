@@ -9,9 +9,10 @@
 #include <vector>
 #include <queue>
 
+#include "components/events.hpp"
+
 #include "spark.hpp"
 #include "window.hpp"
-#include "events.hpp"
 #include "pathfindingGrid.hpp"
 #include "objectFactory.hpp"
 #include "pathfinding.hpp"

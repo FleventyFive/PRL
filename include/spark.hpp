@@ -103,6 +103,7 @@ namespace Spark {
 		constexpr void setOwner(GameObject* g) noexcept { owner = g; }
 
 		explicit Component(ComponentID _id): id(_id) { }
+		virtual ~Component() { }
 	};
 
 	class GameObject {

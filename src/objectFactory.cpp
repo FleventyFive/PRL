@@ -17,6 +17,7 @@ ObjectFactory::ObjectFactory(Spark::World& _world, const std::string& blueprints
 			}
 		}
 
+		// TRANSFER TO A MAP OF A MAP OF VECTORS
 		if(osd.type == OBJ_WEAPON) {
 			weaponSpawnDataVec.push_back(osd);
 		} else if (osd.type == OBJ_ARMOR) {
@@ -37,7 +38,7 @@ Spark::GameObject* ObjectFactory::createObject(const std::string& name) {
 			obj->addComponent<RenderComponent>(
 				component.arguments["name"],
 				component.arguments["description"],
-				component.arguments["symbol"][0],
+				component.arguments["symbol"],
 				getColor(component.arguments["color"]));
 		} else if(component.name == "DamageComponent") {
 			obj->addComponent<DamageComponent>(
@@ -112,7 +113,7 @@ Spark::GameObject* ObjectFactory::createObject(const std::string& name) {
 }
 
 Spark::GameObject* ObjectFactory::spawnObject(unsigned int rarity, unsigned int type) {
-	std::vector<const std::string> candidates;
+	std::vector<std::string> candidates;
 	if(type == OBJ_WEAPON) {
 		for(const auto& data : weaponSpawnDataVec)
 			if(data.rarity == rarity)
